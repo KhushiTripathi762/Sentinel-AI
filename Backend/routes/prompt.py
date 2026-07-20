@@ -1,14 +1,11 @@
-print("LOADED NEW PROMPT ROUTE")
-
 from fastapi import APIRouter
-from pydantic import BaseModel
+from models.prompt_model import PromptRequest
 from services.prompt_detector import detect_prompt
+
+print("LOADED NEW PROMPT ROUTE")
 
 router = APIRouter()
 
-class PromptRequest(BaseModel):
-    prompt: str
-
 @router.post("/prompt")
-def check_prompt(data: PromptRequest):
-    return detect_prompt(data.prompt)
+def check_prompt(request: PromptRequest):
+    return detect_prompt(request.prompt)

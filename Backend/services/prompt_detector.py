@@ -1,3 +1,4 @@
+from services.ai_detector import analyze_text
 patterns = {
     "ignore previous instructions": 40,
     "ignore all previous instructions": 40,
@@ -12,6 +13,8 @@ patterns = {
 def detect_prompt(text):
 
     text = text.lower()
+    ai_result = analyze_text(text)
+    ai_score = ai_result["score"] 
 
     confidence = 0
     matches = []
@@ -24,6 +27,8 @@ def detect_prompt(text):
 
     if confidence > 100:
         confidence = 100
+    # Combine Rule-Based Score with AI Score
+    confidence = int((confidence + ai_score) / 2)    
 
     if confidence >= 70:
         risk = "High"
