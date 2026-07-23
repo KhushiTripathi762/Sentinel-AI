@@ -1,5 +1,3 @@
-print("LOADED NEW PROMPT ROUTE")
-
 from fastapi import APIRouter
 from pydantic import BaseModel
 from services.prompt_detector import detect_prompt

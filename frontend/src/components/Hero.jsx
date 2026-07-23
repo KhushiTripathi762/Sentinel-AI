@@ -1,17 +1,20 @@
-function Hero() {
-  return (
-    <section>
-      <h1>Sentinel AI</h1>
+import { useNavigate } from "react-router-dom";
 
-      <h2>AI Powered Cybersecurity Platform</h2>
+function Hero() {
+  const navigate = useNavigate();
+
+  return (
+    <section className="hero">
+      <h1>AI-Powered Cybersecurity Assistant</h1>
 
       <p>
-        Protect your applications from Prompt Injection and Phishing Attacks.
+        Detect Prompt Injection attacks and Phishing URLs
+        using Artificial Intelligence.
       </p>
 
-      <button>Scan Prompt</button>
-
-      <button>Scan URL</button>
+      <button onClick={() => navigate("/prompt")}>
+        Get Started
+      </button>
     </section>
   );
 }
