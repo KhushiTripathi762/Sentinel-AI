@@ -1,13 +1,15 @@
+import { Link } from "react-router-dom";
+
 function Navbar() {
   return (
     <nav>
       <h2>Sentinel AI</h2>
 
       <ul>
-        <li>Home</li>
-        <li>Prompt Detector</li>
-        <li>Phishing Detector</li>
-        <li>About</li>
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/prompt">Prompt Detector</Link></li>
+        <li><Link to="/phishing">Phishing Detector</Link></li>
+        <li><Link to="/about">About</Link></li>
       </ul>
     </nav>
   );

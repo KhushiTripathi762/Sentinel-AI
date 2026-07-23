@@ -38,3 +38,38 @@ nav li{
 nav li:hover{
   color:#38bdf8;
 }
+section{
+    text-align: center;
+    margin-top: 80px;
+}
+
+section h1{
+    font-size: 60px;
+    margin-bottom: 15px;
+}
+
+section h2{
+    font-size: 30px;
+    color: #38bdf8;
+    margin-bottom: 20px;
+}
+
+section p{
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+section button{
+    padding: 12px 25px;
+    margin: 10px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    background: #38bdf8;
+    color: white;
+    cursor: pointer;
+}
+
+section button:hover{
+    background: #0284c7;
+}
