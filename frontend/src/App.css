@@ -153,3 +153,80 @@ section button:hover{
 .prompt-page button:hover{
     background: #0284c7;
 }
+
+
+.prompt-page input{
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #334155;
+    background: #0f172a;
+    color: white;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.prompt-page input:focus,
+.prompt-page textarea:focus{
+    border-color: #38bdf8;
+    box-shadow: 0 0 10px rgba(56,189,248,0.5);
+}
+
+.prompt-page pre{
+    margin-top: 25px;
+    padding: 20px;
+    background: #111827;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    text-align: left;
+    overflow-x: auto;
+    color: #22c55e;
+    line-height: 1.6;
+}
+
+
+
+.result-card{
+    margin-top:30px;
+    padding:25px;
+    background:#111827;
+    border:1px solid #334155;
+    border-radius:12px;
+    text-align:left;
+}
+
+.result-card h2{
+    color:#38bdf8;
+    margin-bottom:20px;
+}
+
+.result-card p{
+    text-align:left;
+    margin:10px 0;
+    font-size:17px;
+}
+
+.result-card ul{
+    margin-top:10px;
+    padding-left:20px;
+}
+
+.result-card li{
+    margin:8px 0;
+}
+
+.high{
+    color:#ef4444;
+    font-weight:bold;
+}
+
+.medium{
+    color:#f59e0b;
+    font-weight:bold;
+}
+
+.low{
+    color:#22c55e;
+    font-weight:bold;
+}
