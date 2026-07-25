@@ -21,11 +21,19 @@ app.add_middleware(
 )
 
 register_exception_handlers(app)
+<<<<<<< HEAD
+=======
 
-# Register Prompt API
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+>>>>>>> frontend
+
 app.include_router(prompt_router)
-
-# Register Phishing API
 app.include_router(phishing_router)
 
 @app.get("/")
