@@ -39,28 +39,79 @@ function PromptPage() {
       </button>
 
       {result && (
-  <div className="result-card">
-    <h2>Analysis Result</h2>
+        <div className="result-card">
+          <h2>🛡 Sentinel AI Report</h2>
 
-    <p><strong>Attack Type:</strong> {result.attack_type}</p>
-    <p>
+          <p>
+            <strong>Attack Type:</strong> {result.attack_type}
+          </p>
+
+          <p>
   <strong>Risk:</strong>{" "}
-  <span className={result.risk.toLowerCase()}>
+  <span
+    className={
+      result.risk === "High"
+        ? "risk-high"
+        : result.risk === "Medium"
+        ? "risk-medium"
+        : "risk-low"
+    }
+  >
     {result.risk}
   </span>
 </p>
-    <p><strong>Confidence:</strong> {result.confidence}%</p>
-    <p><strong>Recommendation:</strong> {result.recommendation}</p>
 
-    <strong>Matched Patterns:</strong>
+          <div className="confidence-section">
+  <strong>Confidence:</strong>
 
-    <ul>
-      {result.matched_patterns.map((item, index) => (
-        <li key={index}>{item}</li>
-      ))}
-    </ul>
+  <div className="progress-bar">
+    <div
+      className="progress-fill"
+      style={{ width: `${result.confidence}%` }}
+    ></div>
   </div>
-)}
+
+  <span>{result.confidence}%</span>
+</div>
+
+          <p>
+  <strong>Recommendation:</strong>{" "}
+  <span
+    className={
+      result.recommendation === "Block"
+        ? "rec-block"
+        : result.recommendation === "Review"
+        ? "rec-review"
+        : "rec-allow"
+    }
+  >
+    {result.recommendation}
+  </span>
+</p>
+
+          <h3>Matched Patterns</h3>
+
+          <ul>
+            {result.matched_patterns.length > 0 ? (
+              result.matched_patterns.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))
+            ) : (
+              <li>No suspicious patterns detected.</li>
+            )}
+          </ul>
+
+          <h3>AI Analysis</h3>
+
+          <p>
+            <strong>AI Prediction:</strong> {result.ai_analysis.label}
+          </p>
+
+          <p>
+            <strong>AI Confidence:</strong> {result.ai_analysis.score}%
+          </p>
+        </div>
+      )}
     </div>
   );
 }

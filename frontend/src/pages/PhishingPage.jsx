@@ -11,8 +11,8 @@ function PhishingPage() {
       setLoading(true);
 
       const data = await analyzeURL(url);
-
       setResult(data);
+
     } catch (error) {
       console.error(error);
       alert("Backend is not running or API connection failed.");
@@ -23,6 +23,7 @@ function PhishingPage() {
 
   return (
     <div className="prompt-page">
+
       <h1>Phishing URL Detector</h1>
 
       <input
@@ -32,35 +33,73 @@ function PhishingPage() {
         onChange={(e) => setUrl(e.target.value)}
       />
 
-      <br />
-
       <button onClick={handleAnalyze} disabled={loading}>
         {loading ? "Analyzing..." : "Analyze URL"}
       </button>
 
       {result && (
-  <div className="result-card">
-    <h2>Analysis Result</h2>
+        <div className="result-card">
 
-    <p><strong>Attack Type:</strong> {result.attack_type}</p>
-    <p>
-  <strong>Risk:</strong>{" "}
-  <span className={result.risk.toLowerCase()}>
-    {result.risk}
-  </span>
-</p>
-    <p><strong>Confidence:</strong> {result.confidence}%</p>
-    <p><strong>Recommendation:</strong> {result.recommendation}</p>
+          <h2>🛡 Sentinel AI Report</h2>
 
-    <strong>Reasons:</strong>
+          <p>
+            <strong>Attack Type:</strong> {result.attack_type}
+          </p>
 
-    <ul>
-      {result.reasons.map((reason, index) => (
-        <li key={index}>{reason}</li>
-      ))}
-    </ul>
-  </div>
-)}
+          <p>
+            <strong>Risk:</strong>{" "}
+            <span
+              className={
+                result.risk === "High"
+                  ? "risk-high"
+                  : result.risk === "Medium"
+                  ? "risk-medium"
+                  : "risk-low"
+              }
+            >
+              {result.risk}
+            </span>
+          </p>
+
+          <div className="confidence-section">
+            <strong>Confidence:</strong>
+
+            <div className="progress-bar">
+              <div
+                className="progress-fill"
+                style={{ width: `${result.confidence}%` }}
+              ></div>
+            </div>
+
+            <span>{result.confidence}%</span>
+          </div>
+
+          <p>
+            <strong>Recommendation:</strong>{" "}
+            <span
+              className={
+                result.recommendation === "Block"
+                  ? "rec-block"
+                  : result.recommendation === "Review"
+                  ? "rec-review"
+                  : "rec-allow"
+              }
+            >
+              {result.recommendation}
+            </span>
+          </p>
+
+          <h3>Reasons</h3>
+
+          <ul>
+            {result.reasons.map((reason, index) => (
+              <li key={index}>{reason}</li>
+            ))}
+          </ul>
+
+        </div>
+      )}
+
     </div>
   );
 }
