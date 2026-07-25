@@ -1,27 +1,40 @@
-from transformers import pipeline
+import os
+import requests
 
-classifier = None
+HF_TOKEN = os.getenv("HF_TOKEN")
 
+API_URL = "https://api-inference.huggingface.co/models/Shomi28/PromptShield"
 
-def get_classifier():
-    global classifier
-
-    if classifier is None:
-        classifier = pipeline(
-            "text-classification",
-            model="Shomi28/PromptShield"
-        )
-
-    return classifier
+headers = {
+    "Authorization": f"Bearer {HF_TOKEN}"
+}
 
 
 def analyze_text(text):
 
-    model = get_classifier()
+    response = requests.post(
+        API_URL,
+        headers=headers,
+        json={"inputs": text},
+        timeout=60
+    )
 
-    result = model(text)[0]
+    response.raise_for_status()
 
-    return {
-        "label": result["label"].lower(),
-        "score": round(result["score"] * 100, 2)
-    }
+    result = response.json()
+
+    # HF inference returns nested list
+    if isinstance(result, list) and len(result) > 0:
+        if isinstance(result[0], list):
+            predictions = result[0]
+        else:
+            predictions = result
+
+        best = max(predictions, key=lambda x: x["score"])
+
+        return {
+            "label": best["label"].lower(),
+            "score": round(best["score"] * 100, 2)
+        }
+
+    raise Exception(f"Unexpected HF response: {result}")
