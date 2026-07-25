@@ -1,50 +1,34 @@
-import os
-import requests
-
-API_URL = "https://api-inference.huggingface.co/models/Shomi28/PromptShield"
+patterns = {
+    "ignore previous instructions": 100,
+    "ignore all previous instructions": 100,
+    "forget previous instructions": 90,
+    "system prompt": 85,
+    "reveal system prompt": 90,
+    "developer mode": 75,
+    "jailbreak": 90,
+    "bypass": 70,
+    "ignore safety": 80,
+    "disable safety": 90,
+    "act as": 50,
+    "pretend to be": 50,
+}
 
 
 def analyze_text(text: str):
-    hf_token = os.getenv("HF_TOKEN")
+    text = text.lower()
 
-    if not hf_token:
-        raise RuntimeError("HF_TOKEN environment variable is not configured.")
+    score = 0
 
-    headers = {
-        "Authorization": f"Bearer {hf_token}"
+    for pattern, weight in patterns.items():
+        if pattern in text:
+            score = max(score, weight)
+
+    if score >= 50:
+        label = "injection"
+    else:
+        label = "safe"
+
+    return {
+        "label": label,
+        "score": score
     }
-
-    try:
-        response = requests.post(
-            API_URL,
-            headers=headers,
-            json={"inputs": text},
-            timeout=60,
-        )
-    except requests.RequestException as e:
-        raise RuntimeError(f"Failed to connect to Hugging Face: {e}")
-
-    if response.status_code != 200:
-        raise RuntimeError(
-            f"Hugging Face API error {response.status_code}: {response.text}"
-        )
-
-    result = response.json()
-
-    if (
-        isinstance(result, list)
-        and len(result) > 0
-    ):
-        predictions = result[0] if isinstance(result[0], list) else result
-
-        if not predictions:
-            raise RuntimeError("Empty prediction returned from Hugging Face.")
-
-        best = max(predictions, key=lambda x: x.get("score", 0))
-
-        return {
-            "label": str(best.get("label", "unknown")).lower(),
-            "score": round(float(best.get("score", 0)) * 100, 2),
-        }
-
-    raise RuntimeError(f"Unexpected Hugging Face response: {result}")
