@@ -11,17 +11,19 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Enable CORS for frontend
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],   # Development only
+    allow_origins=["http://localhost:5173"],   # Frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Register exception handlers
 register_exception_handlers(app)
 
+# Include routes
 app.include_router(prompt_router)
 app.include_router(phishing_router)
 
