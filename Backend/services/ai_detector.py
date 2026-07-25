@@ -1,40 +1,50 @@
 import os
 import requests
 
-HF_TOKEN = os.getenv("HF_TOKEN")
-
 API_URL = "https://api-inference.huggingface.co/models/Shomi28/PromptShield"
 
-headers = {
-    "Authorization": f"Bearer {HF_TOKEN}"
-}
 
+def analyze_text(text: str):
+    hf_token = os.getenv("HF_TOKEN")
 
-def analyze_text(text):
+    if not hf_token:
+        raise RuntimeError("HF_TOKEN environment variable is not configured.")
 
-    response = requests.post(
-        API_URL,
-        headers=headers,
-        json={"inputs": text},
-        timeout=60
-    )
+    headers = {
+        "Authorization": f"Bearer {hf_token}"
+    }
 
-    response.raise_for_status()
+    try:
+        response = requests.post(
+            API_URL,
+            headers=headers,
+            json={"inputs": text},
+            timeout=60,
+        )
+    except requests.RequestException as e:
+        raise RuntimeError(f"Failed to connect to Hugging Face: {e}")
+
+    if response.status_code != 200:
+        raise RuntimeError(
+            f"Hugging Face API error {response.status_code}: {response.text}"
+        )
 
     result = response.json()
 
-    # HF inference returns nested list
-    if isinstance(result, list) and len(result) > 0:
-        if isinstance(result[0], list):
-            predictions = result[0]
-        else:
-            predictions = result
+    if (
+        isinstance(result, list)
+        and len(result) > 0
+    ):
+        predictions = result[0] if isinstance(result[0], list) else result
 
-        best = max(predictions, key=lambda x: x["score"])
+        if not predictions:
+            raise RuntimeError("Empty prediction returned from Hugging Face.")
+
+        best = max(predictions, key=lambda x: x.get("score", 0))
 
         return {
-            "label": best["label"].lower(),
-            "score": round(best["score"] * 100, 2)
+            "label": str(best.get("label", "unknown")).lower(),
+            "score": round(float(best.get("score", 0)) * 100, 2),
         }
 
-    raise Exception(f"Unexpected HF response: {result}")
+    raise RuntimeError(f"Unexpected Hugging Face response: {result}")
