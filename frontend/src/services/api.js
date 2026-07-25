@@ -1,7 +1,6 @@
 
 const BASE_URL = "http://127.0.0.1:8000";
 
-
 export async function analyzePrompt(prompt) {
   const response = await fetch(`${BASE_URL}/prompt`, {
     method: "POST",
@@ -9,7 +8,7 @@ export async function analyzePrompt(prompt) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      prompt: prompt,
+      text: prompt,   // ✅ Backend expects "text"
     }),
   });
 
