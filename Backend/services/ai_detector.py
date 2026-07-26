@@ -1,13 +1,25 @@
 from transformers import pipeline
 
-classifier = pipeline(
-    "text-classification",
-    model="Shomi28/PromptShield"
-)
+classifier = None
+
+
+def get_classifier():
+    global classifier
+
+    if classifier is None:
+        classifier = pipeline(
+            "text-classification",
+            model="Shomi28/PromptShield"
+        )
+
+    return classifier
 
 
 def analyze_text(text):
-    result = classifier(text)[0]
+
+    model = get_classifier()
+
+    result = model(text)[0]
 
     return {
         "label": result["label"].lower(),
